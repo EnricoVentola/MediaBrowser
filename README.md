@@ -1,7 +1,7 @@
 # 📺 Media Browser
 
-**Media Browser** is a lightweight, self-hosted media directory browser built entirely on **NGINX** — no database, no backend code, no dependencies.  
-It provides a clean, responsive interface for browsing SMB/NFS mounted media shares as web accessible including integration with **Authentik** IDaM and **Basic Auth** integration.  
+**Media Browser** is a lightweight, self-hosted media directory browser built entirely on **NGINX** — no database and no additionaly library dependencies.  
+It provides a clean, responsive interface for browsing SMB/NFS mounted media shares as web downloadable files and includes integration with **Authentik** IDaM and **Basic Auth** integration.  
 File listings are styled with a dark theme and automatically cleaned up to remove unnecessary prefixes, keeping names simple and readable.
 
 ---
