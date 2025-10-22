@@ -19,4 +19,10 @@ File listings are styled with a dark theme and automatically cleaned up to remov
 - 🔧 **Fully configurable** — edit a few static files, no rebuild required
 
 
+## 💬 Contributing
 
+- Pull requests and issues are welcome!
+- Potential future improvements:
+- Sorting options (by size, date, or name)
+- Fancyindex module integration
+- Fork the project and submit a PR on GitHub.
