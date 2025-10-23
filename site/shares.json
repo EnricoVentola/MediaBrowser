@@ -1,0 +1,5 @@
+[
+  { "id": "media1",      "label": "Misc Media",                 "icon": "📺" },
+  { "id": "GoPro",  "label": "GoPro",  "icon": "🎬" },
+  { "id": "Insta360", "label": "Insta360",   "icon": "🎞️" }
+]
