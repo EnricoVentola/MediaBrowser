@@ -1,0 +1,30 @@
+/* Fancy styling for NGINX classic <pre> autoindex */
+body {
+  background: radial-gradient(circle at 25% 25%, #14161a, #0b0c0e);
+  color: #e4e6eb;
+  font-family: "Inter","Roboto Mono",monospace,system-ui;
+  margin: 0; padding: 40px;
+}
+h1 {
+  text-align: center; margin-bottom: 30px; color: #fff;
+  text-shadow: 0 0 8px rgba(0,123,255,0.4);
+}
+pre {
+  background: rgba(26,28,32,0.85);
+  border-radius: 10px; padding: 20px;
+  white-space: pre;              /* keep alignment for date/size columns */
+  font-size: 0.95rem; line-height: 1.6;
+  box-shadow: 0 0 20px rgba(0,123,255,0.1);
+}
+pre a {
+  display: inline-block;         /* let filename be a block region */
+  max-width: 60%;                /* filename wraps within 60% */
+  white-space: normal;           /* allow wrapping for filename only */
+  overflow-wrap: anywhere;       /* break long words safely */
+  color: #e4e6eb; text-decoration: none; font-weight: 500;
+  transition: color .2s ease, text-shadow .2s ease;
+}
+pre a:hover { color: #00b4ff; text-shadow: 0 0 8px rgba(0,180,255,0.4); }
+pre a[href="../"] { color: #9da3af; font-style: italic; }
+pre a[href$="/"]::after { content: ""; }
+footer { margin-top: 30px; text-align: center; color: #9da3af; font-size: .9rem; }
