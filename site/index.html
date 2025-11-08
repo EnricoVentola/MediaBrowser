@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Media Browser</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0e1116; --bg1:#141922; --bg2:#0b0e14;
+      --card:#171b23; --card2:#1b202a; --text:#e8ecf1; --muted:#9aa4b2;
+      --primary:#3b82f6; --glow:rgba(59,130,246,.35); --ring:rgba(59,130,246,.25);
+    }
+    *{box-sizing:border-box} html,body{height:100%}
+    body{
+      margin:0;color:var(--text);
+      font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;
+      background:
+        radial-gradient(1200px 800px at 15% -10%, var(--bg1), transparent 60%),
+        radial-gradient(900px 600px at 85% 10%, var(--glow), transparent 45%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
+      display:flex;align-items:center;justify-content:center;padding:28px;
+    }
+    .container{width:min(1100px,100%)}
+    header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .title{font-weight:700;letter-spacing:.3px;font-size:1.3rem}
+    .subtitle{color:var(--muted);font-size:.95rem;margin-top:2px}
+    .panel{background:linear-gradient(180deg,var(--card),var(--card2));border-radius:14px;box-shadow:0 10px 25px rgba(0,0,0,.35),0 0 0 1px rgba(255,255,255,.06) inset;padding:18px;border:1px solid rgba(255,255,255,.06)}
+    .user{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:.95rem}
+    .badge{display:inline-flex;align-items:center;gap:4px;background:rgba(59,130,246,.12);border:1px solid var(--ring);border-radius:999px;padding:4px 8px;color:#cfe1ff;font-weight:600}
+    .grid{margin-top:6px;display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+    .card{position:relative;background:linear-gradient(180deg,#121720,#0f141c);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:18px 16px;text-decoration:none;color:var(--text);box-shadow:0 10px 25px rgba(0,0,0,.35);tra>
+    .card:hover{transform:translateY(-3px);border-color:rgba(99,155,255,.35);box-shadow:0 16px 36px rgba(59,130,246,.25)}
+    .icon{font-size:1.35rem;opacity:.95;margin-right:8px}
+    .label{font-weight:650;letter-spacing:.2px;font-size:1.05rem;display:block;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .path{color:var(--muted);font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .empty{color:var(--muted);text-align:center;padding:32px}
+    footer{color:var(--muted);text-align:center;margin-top:18px;font-size:.9rem}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div>
+          <div class="title">Media Browser</div>
+        </div>
+      </div>
+      <div class="user panel">
+        <span>Signed in as</span>
+        <span class="badge" id="nameBadge">Loading…</span>
+      </div>
+    </header>
+
+    <section class="panel">
+      <div id="shares" class="grid" aria-live="polite"></div>
+      <div id="empty" class="empty" style="display:none;">
+        No shares found. Check <code>/usr/share/nginx/html/shares.json</code>.
+      </div>
+    </section>
+
+    <footer>
+      • MediaBrowser version 1.0
+    </footer>
+  </div>
+
+  <script>
+    function getCookie(name){
+      const m = document.cookie.match(new RegExp('(?:^|; )' + name.replace(/([$?*|{}\]\\^])/g,'\\$1') + '=([^;]*)'));
+      return m ? decodeURIComponent(m[1]) : null;
+    }
+    function esc(s){ const d=document.createElement('div'); d.textContent=String(s??''); return d.innerHTML; }
+
+    function renderUser(){
+      const display = getCookie('X-authentik-nameformatted') || getCookie('X-authentik-name') || 'Unknown';
+      document.getElementById('nameBadge').innerHTML = esc(display);
+    }
+    async function loadShares(){
+      const grid = document.getElementById('shares');
+      const empty = document.getElementById('empty');
+      grid.innerHTML = '<div class="empty" style="grid-column:1/-1;">Loading…</div>';
+      try{
+        const res = await fetch('/shares.json', { cache:'no-store' });
+        if(!res.ok) throw new Error('shares.json not found');
+        const shares = await res.json();
+        if(!Array.isArray(shares) || !shares.length){ grid.innerHTML=''; empty.style.display='block'; return; }
+        grid.innerHTML = shares.map(s=>{
+          const href  = esc(s.href || `/shares/${encodeURIComponent(s.id)}/`);
+          const icon  = esc(s.icon || '📁');
+          const label = esc(s.label || s.id);
+          return `<a class="card" href="${href}">
+            <div class="label"><span class="icon">${icon}</span>${label}</div>
+          </a>`;
+        }).join('');
+      }catch(e){
+        console.error(e); grid.innerHTML=''; empty.style.display='block';
+        empty.innerHTML='Could not load <code>shares.json</code>.';
+      }
+    }
+    window.addEventListener('load', ()=>{ renderUser(); loadShares(); });
+  </script>
+</body>
+</html>
+
+          
